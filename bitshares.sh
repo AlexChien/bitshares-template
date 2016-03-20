@@ -286,10 +286,20 @@ case "$1" in
         # = Build GUI code and deploy it to web_root =
         build_gui
         ;;
+    update_gui)
+        # = Install nodejs, npm using nvm =
+        use_nvm
+
+        # = Get bitshare-2-ui gui code =
+        update_gui
+
+        # = Build GUI code and deploy it to web_root =
+        build_gui
     *)
         echo "Usage: ./bitshares.sh {install|update}"
         echo "install: install bitshares on a brand new environment"
         echo "update: update bitshares(witness_node, cli_wallet, delayed_node) and web-gui"
+        echo "update_gui: only update and build web-gui"
         exit 1
         ;;
 esac
