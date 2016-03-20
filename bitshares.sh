@@ -73,8 +73,10 @@ install_bitshares_requirements(){
 
     # boost
     mkdir -p $boost_root
-    wget -c 'http://sourceforge.net/projects/boost/files/boost/1.57.0/boost_1_57_0.tar.bz2/download' -O $src_dir/boost_1_57_0.tar.bz2
-    cd $src_dir && tar xjf boost_1_57_0.tar.bz2
+    if [[ ! -d "$src_dir/boost_1_57_0" ]]; then
+        wget -c 'http://sourceforge.net/projects/boost/files/boost/1.57.0/boost_1_57_0.tar.bz2/download' -O $src_dir/boost_1_57_0.tar.bz2
+        cd $src_dir && tar xjf boost_1_57_0.tar.bz2
+    fi
     cd boost_1_57_0/ && ./bootstrap.sh "--prefix=$boost_root" && ./b2 install
 }
 
