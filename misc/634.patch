@@ -1,0 +1,22 @@
+From 20f75ebaf054eb1f3f6f42ee34951f196e6586ac Mon Sep 17 00:00:00 2001
+From: abitmore <abitmore@users.noreply.github.com>
+Date: Sun, 20 Mar 2016 15:34:10 +0100
+Subject: [PATCH] Fix cli_wallet out-of-source builds #633
+
+---
+ libraries/wallet/CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/libraries/wallet/CMakeLists.txt b/libraries/wallet/CMakeLists.txt
+index 3d66c48..220b21a 100644
+--- a/libraries/wallet/CMakeLists.txt
++++ b/libraries/wallet/CMakeLists.txt
+@@ -8,7 +8,7 @@ if( PERL_FOUND AND DOXYGEN_FOUND AND NOT "${CMAKE_GENERATOR}" STREQUAL "Ninja" )
+   add_custom_command( OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/doxygen/perlmod/DoxyDocs.pm
+                       WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+                       COMMAND ${DOXYGEN_EXECUTABLE}
+-                      DEPENDS Doxyfile include/graphene/wallet/wallet.hpp )
++                      DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile include/graphene/wallet/wallet.hpp )
+   add_custom_command( OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/api_documentation.cpp
+                       COMMAND ${PERL_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/generate_api_documentation.pl ${CMAKE_CURRENT_BINARY_DIR}/api_documentation.cpp.new
+ 

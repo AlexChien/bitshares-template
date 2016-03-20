@@ -97,9 +97,10 @@ update_node(){
     git submodule update $git_args
 
     # TODO: find a proper solution
-    # missing DoxyFile error
-    # dirty hack
-    cp $pwd/misc/DoxyFile $src_dir/bitshares-2/src/libraries/wallet/
+    # missing Doxyfile error
+    # https://github.com/cryptonomex/graphene/issues/633
+    # reason is we don't make within the source folder, waiting for a official fix
+    patch -p1 < $pwd/misc/634.patch
 
     # make build directory ready
     mkdir -p $build_dir/bitshares-2
