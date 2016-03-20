@@ -295,6 +295,7 @@ case "$1" in
 
         # = Build GUI code and deploy it to web_root =
         build_gui
+        ;;
     *)
         echo "Usage: ./bitshares.sh {install|update}"
         echo "install: install bitshares on a brand new environment"
