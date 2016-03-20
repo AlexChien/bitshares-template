@@ -134,6 +134,7 @@ update_node(){
     done
 
     cp $pwd/misc/witness_node.ini /etc/init.d/witness_node
+    sed -i -e "s|PATH_TO_DATA_DIR|$build_dir/blockchain_data|g" /etc/init.d/witness_node
     chmod +x /etc/init.d/witness_node
     update-rc.d witness_node defaults 99 01
 
