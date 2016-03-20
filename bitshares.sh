@@ -244,7 +244,7 @@ install_nginx(){
         # prepare conf files
         cp $pwd/nginx/ssl_params /etc/nginx/
         for conf in $pwd/nginx/*.example; do cp $conf /etc/nginx/sites-available/; done
-        mv /etc/nginx/sites-enabled/default /etc/nginx/sites-available/
+        rm /etc/nginx/sites-enabled/default
         ln -s /etc/nginx/sites-available/web-ui-http.conf.example /etc/nginx/sites-enabled/web-ui-http.conf
 
         # update root directory
