@@ -94,6 +94,11 @@ update_node(){
     cd $src_dir/bitshares-2
     git submodule update $git_args
 
+    # TODO: find a proper solution
+    # missing DoxyFile error
+    # dirty hack
+    cp $pwd/misc/DoxyFile $src_dir/bitshares-2/src/libraries/wallet/
+
     # make build directory ready
     mkdir -p $build_dir/bitshares-2
     cd $build_dir/bitshares-2
