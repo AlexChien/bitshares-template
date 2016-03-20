@@ -158,6 +158,10 @@ update_gui(){
     cd $src_dir/bitshares-2-ui
     git submodule update $git_args
 
+    # get latest node-sass
+    cd web; npm install node-sass
+
+    # install dependencies for each fold
     for dir in dl web; do
       cd "$src_dir/bitshares-2-ui/$dir" && npm install
     done
@@ -214,6 +218,12 @@ use_nvm(){
     fi
     . "$HOME/.nvm/nvm.sh"
     nvm use v5
+
+    # to fix issue
+    # sh: 1: node: Permission denied
+    npm config set user 0
+    npm config set unsafe-perm true
+    npm install -g sm
 }
 
 # if nginx is already installed, skip
