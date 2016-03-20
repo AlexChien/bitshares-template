@@ -154,9 +154,14 @@ update_gui(){
     done
 }
 
+get_ip(){
+    dig +short myip.opendns.com @resolver1.opendns.com
+}
+
 replace_default_connection(){
     # replace ws connection to this server
-    my_ip=`ifconfig eth1 | awk '/inet addr/{print substr($2,6)}'`
+    # my_ip=`ifconfig eth1 | awk '/inet addr/{print substr($2,6)}'`
+    my_ip=`get_ip`
     my_ws="ws://$my_ip/ws"
 
     # replace wss connection and faucet url
