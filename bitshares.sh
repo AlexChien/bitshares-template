@@ -206,14 +206,13 @@ build_gui(){
 }
 
 use_nvm(){
-    if [[ -f "$HOME/.nvm/nvm.sh" ]]; then
-        nvm use v5
-    else
+    if [[ ! -f "$HOME/.nvm/nvm.sh" ]]; then
         curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.30.2/install.sh | bash
         . "$HOME/.nvm/nvm.sh"
         nvm install v5
-        nvm use v5
     fi
+    . "$HOME/.nvm/nvm.sh"
+    nvm use v5
 }
 
 # if nginx is already installed, skip
