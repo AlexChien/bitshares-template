@@ -125,7 +125,7 @@ update_node(){
       cp $build_dir/bitshares-2/programs/$binname/$binname /usr/bin/
     done
 
-    cp $pwd/witness_node.ini /etc/init.d/witness_node
+    cp $pwd/misc/witness_node.ini /etc/init.d/witness_node
     chmod +x /etc/init.d/witness_node
     update-rc.d witness_node defaults 99 01
 
