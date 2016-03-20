@@ -1,0 +1,98 @@
+server {
+    listen 80;
+    server_name faucet.acme.com;
+    root          PATH_TO_FAUCET_PUBLIC_DIR;
+    index         index.html index.htm;
+
+    # error_log     PATH_TO_ERROR_LOG info;
+
+    # rewrite_log  on;
+
+    # Limit HTTP requests types
+    if ($request_method !~ ^(GET|HEAD|PUT|POST|DELETE|OPTIONS)$ ){
+      return 405;
+    }
+
+    try_files $uri @passenger;
+
+    if (-f $document_root/maintenance.html) {
+    	return 503;
+    }
+
+
+    location ~* \.(eot|ttf|woff|woff2)$ {
+        add_header Access-Control-Allow-Origin *;
+    }
+
+    location ~* ^(/js|/css|locale) {
+      gzip on; # to serve pre-gzipped version
+      if ( -f $request_filename) {
+        expires 7d;
+        add_header Cache-Control public;
+        # Some browsers still send conditional-GET requests if there's a
+        # Last-Modified header or an ETag header even if they haven't
+        # reached the expiry date sent in the Expires header.
+        # add_header Last-Modified "";
+        # add_header ETag "";
+        access_log off;
+        break;
+      }
+    }
+
+    location ~* \.(jpg|gif|png|swf)$ {
+      if ( -f $request_filename){
+        add_header Cache-Control public;
+        access_log off;
+        #expires max;
+        expires 1d;
+        break;
+      }
+    }
+
+
+    # There is no need to touch Rails stack for wrong urls (as well as extensions) in assets directories
+    location ~ ^/(assets|images|javascripts|stylesheets|system)/  {
+      error_page 404 /404.html;
+    }
+
+
+    location @passenger {
+	passenger_pass_header X-Accel-Redirect;
+        passenger_min_instances 2;
+        passenger_enabled on;
+        rack_env production;
+        passenger_ruby  /home/runner/.rvm/gems/ruby-2.1.5@bts2faucet/wrappers/ruby;
+    }
+
+    #error_page  404              /404.html;
+
+    # redirect server error pages to the static page /50x.html
+    error_page   500 502 504  /50x.html;
+    location = /50x.html {
+        root   html;
+    }
+
+    error_page 503 @maintenance;
+    location @maintenance {
+    	rewrite ^(.*)$ /maintenance.html break;
+    }
+
+    # Block bots who like track urls (php usually)
+    # location ~ \.php$ {
+    #   deny  all;
+    # }
+
+    # # Enable monitoring of POST requests reported in JSON
+    # location /progress {
+    #   upload_progress_json_output;
+    #   report_uploads foobar_uploads;
+    # }
+
+    # location /nginx_status {
+    #   # copied from http://blog.kovyrin.net/2006/04/29/monitoring-nginx-with-rrdtool/
+    #   stub_status on;
+    #   access_log   off;
+    #   # allow SOME.IP.ADD.RESS;
+    #   deny all;
+    # }
+}

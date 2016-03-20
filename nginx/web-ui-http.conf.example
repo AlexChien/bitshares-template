@@ -1,0 +1,92 @@
+upstream websocket {
+    server 127.0.0.1:8090 max_fails=3 fail_timeout=6s;
+    # requires commercial edition or additional compile flag
+    # sticky_cookie_insert wssrv_id expires=3h domain=.acme.com path=/;
+}
+
+server {
+    listen 80 default_server;
+	listen [::]:80 default_server;
+
+	# change this to your actual domain name like acme.com
+    server_name _;
+
+	# path to $build_dir/web_root
+    root          PATH_TO_WEB_ROOT;
+    index         index.html index.htm;
+
+	# uncomment this if you want error log
+    # error_log     /path/to/error.log info;
+
+    # rewrite assets to root url
+    rewrite (\/[^\/]+)+\/(app\.js|app\.css|1\.app\.js|.+\.worker\.js|.+\.dat|vendors\.js|favicon\.ico) /$2 permanent;
+
+    # to support referral links format
+    # https://acme.com/r/MY_ID
+    # along with original format
+    # https://acme.com?r=MY_ID
+    rewrite /r/(.+)     /?r=$1 permanent;
+
+    # Limit HTTP requests types
+    if ($request_method !~ ^(GET|HEAD|PUT|POST|DELETE|OPTIONS)$ ){
+      return 405;
+    }
+
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+
+    location /ws {
+        proxy_pass http://websocket;
+    }
+
+    location ~* \.(eot|ttf|woff|woff2)$ {
+        add_header Access-Control-Allow-Origin *;
+    }
+
+    location ~* (\.js|\.css|\.dat) {
+      gzip_static on; # to serve pre-gzipped version
+      if ( -f $request_filename) {
+        expires 7d;
+        add_header Cache-Control public;
+        # Some browsers still send conditional-GET requests if there's a
+        # Last-Modified header or an ETag header even if they haven't
+        # reached the expiry date sent in the Expires header.
+        # add_header Last-Modified "";
+        # add_header ETag "";
+        access_log off;
+        break;
+      }
+    }
+
+    location ~* \.(jpg|gif|png|swf)$ {
+      if ( -f $request_filename){
+        add_header Cache-Control public;
+        access_log off;
+        #expires max;
+        expires 1d;
+        break;
+      }
+    }
+
+    #error_page  404              /404.html;
+
+    # Block bots who like track urls (php usually)
+    # location ~ \.php$ {
+    #   deny  all;
+    # }
+
+    # # Enable monitoring of POST requests reported in JSON
+    # location /progress {
+    #   upload_progress_json_output;
+    #   report_uploads foobar_uploads;
+    # }
+
+    # location /nginx_status {
+    #   # copied from http://blog.kovyrin.net/2006/04/29/monitoring-nginx-with-rrdtool/
+    #   stub_status on;
+    #   access_log   off;
+    #   # allow SOME.IP.ADD.RESS;
+    #   deny all;
+    # }
+}
