@@ -12,12 +12,12 @@ upstream websocket {
 
 server {
     listen 80 default_server;
-	listen [::]:80 default_server;
+    listen [::]:80 default_server;
 
-	# change this to your actual domain name like acme.com
+    # change this to your actual domain name like acme.com
     server_name _;
 
-	# rewrite everything to ssl
+    # rewrite everything to ssl
     rewrite ^(.*) https://$host$1 permanent;
 
     access_log /dev/null;
@@ -29,12 +29,12 @@ server {
 
     include ssl_params;
 
-	# change this to your actual domain name like acme.com
+    # change this to your actual domain name like acme.com
     server_name   _;
     root          PATH_TO_WEB_ROOT;
     index         index.html index.htm;
 
-	# uncomment this if you want error log
+    # uncomment this if you want error log
     # error_log     /path/to/error.log info;
 
     # rewrite_log  on;

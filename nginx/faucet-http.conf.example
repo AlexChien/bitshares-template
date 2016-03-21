@@ -16,7 +16,7 @@ server {
     try_files $uri @passenger;
 
     if (-f $document_root/maintenance.html) {
-    	return 503;
+        return 503;
     }
 
 
@@ -57,11 +57,11 @@ server {
 
 
     location @passenger {
-	passenger_pass_header X-Accel-Redirect;
+    passenger_pass_header X-Accel-Redirect;
         passenger_min_instances 2;
         passenger_enabled on;
         rack_env production;
-		# change to path to ruby
+        # change to path to ruby
         passenger_ruby  /home/runner/.rvm/gems/ruby-2.1.5@bts2faucet/wrappers/ruby;
     }
 
@@ -75,7 +75,7 @@ server {
 
     error_page 503 @maintenance;
     location @maintenance {
-    	rewrite ^(.*)$ /maintenance.html break;
+        rewrite ^(.*)$ /maintenance.html break;
     }
 
     # Block bots who like track urls (php usually)

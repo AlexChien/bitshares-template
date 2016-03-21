@@ -6,16 +6,16 @@ upstream websocket {
 
 server {
     listen 80 default_server;
-	listen [::]:80 default_server;
+    listen [::]:80 default_server;
 
-	# change this to your actual domain name like acme.com
+    # change this to your actual domain name like acme.com
     server_name _;
 
-	# path to $build_dir/web_root
+    # path to $build_dir/web_root
     root          PATH_TO_WEB_ROOT;
     index         index.html index.htm;
 
-	# uncomment this if you want error log
+    # uncomment this if you want error log
     # error_log     /path/to/error.log info;
 
     # rewrite assets to root url
