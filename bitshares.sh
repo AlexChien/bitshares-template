@@ -262,11 +262,18 @@ update_self(){
     git pull
 }
 
+mk_folder_mine(){
+    sudo chown -R $USER $pwd
+}
+
 # ============
 # = Commands =
 # ============
 case "$1" in
     install)
+        # make folder mine
+        mk_folder_mine
+
         # = Update myself =
         update_self
 
@@ -295,6 +302,9 @@ case "$1" in
         install_nginx
         ;;
     update)
+        # make folder mine
+        mk_folder_mine
+
         # = Update myself =
         update_self
 
@@ -308,6 +318,9 @@ case "$1" in
         build_gui
         ;;
     update_gui)
+        # make folder mine
+        mk_folder_mine
+
         # = Install nodejs, npm using nvm =
         use_nvm
 
