@@ -58,7 +58,7 @@ setup_folder_structure(){
 }
 
 install_bitshares_requirements(){
-    apt-get update
+    sudo apt-get update
 
     # gcc/g++ 4.9
     sudo apt-get install -y software-properties-common
@@ -67,9 +67,9 @@ install_bitshares_requirements(){
     sudo apt-get install -y gcc-4.9 g++-4.9
     sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.9 60 --slave /usr/bin/g++ g++ /usr/bin/g++-4.9
 
-    apt-get install -y curl git ntp cmake build-essential libbz2-dev libdb++-dev libdb-dev libssl-dev openssl libreadline-dev autoconf libtool libboost-all-dev
-    apt-get install -y autotools-dev  libicu-dev python-dev screen
-    apt-get install -y doxygen libncurses5-dev
+    sudo apt-get install -y curl git ntp cmake build-essential libbz2-dev libdb++-dev libdb-dev libssl-dev openssl libreadline-dev autoconf libtool libboost-all-dev
+    sudo apt-get install -y autotools-dev  libicu-dev python-dev screen
+    sudo apt-get install -y doxygen libncurses5-dev
 
     # boost
     mkdir -p $boost_root
@@ -124,22 +124,22 @@ update_node(){
     # if witness_node already existed, stop it and after several
     # seconds (wait until it's completed stopped)
     if [[ -f /etc/init.d/witness_node ]]; then
-        /etc/init.d/witness_node stop
+        sudo /etc/init.d/witness_node stop
         sleep 20
     fi
 
     # cp compiled binary to /usr/bin
     for binname in witness_node cli_wallet delayed_node; do
-      cp $build_dir/bitshares-2/programs/$binname/$binname /usr/bin/
+      sudo cp $build_dir/bitshares-2/programs/$binname/$binname /usr/bin/
     done
 
-    cp $pwd/misc/witness_node.ini /etc/init.d/witness_node
-    sed -i -e "s|PATH_TO_DATA_DIR|$build_dir/blockchain_data|g" /etc/init.d/witness_node
-    chmod +x /etc/init.d/witness_node
-    update-rc.d witness_node defaults 99 01
+    sudo cp $pwd/misc/witness_node.ini /etc/init.d/witness_node
+    sudo sed -i -e "s|PATH_TO_DATA_DIR|$build_dir/blockchain_data|g" /etc/init.d/witness_node
+    sudo chmod +x /etc/init.d/witness_node
+    sudo update-rc.d witness_node defaults 99 01
 
     # start witness node
-    /etc/init.d/witness_node start
+    sudo /etc/init.d/witness_node start
 }
 
 update_gui(){
@@ -242,15 +242,15 @@ install_nginx(){
         sudo apt-get install -y nginx-extras passenger
 
         # prepare conf files
-        cp $pwd/nginx/ssl_params /etc/nginx/
-        for conf in $pwd/nginx/*.example; do cp $conf /etc/nginx/sites-available/; done
-        rm /etc/nginx/sites-enabled/default
-        ln -s /etc/nginx/sites-available/web-ui-http.conf.example /etc/nginx/sites-enabled/web-ui-http.conf
+        sudo cp $pwd/nginx/ssl_params /etc/nginx/
+        for conf in $pwd/nginx/*.example; do sudo cp $conf /etc/nginx/sites-available/; done
+        sudo rm /etc/nginx/sites-enabled/default
+        sudo ln -s /etc/nginx/sites-available/web-ui-http.conf.example /etc/nginx/sites-enabled/web-ui-http.conf
 
         # update root directory
-        sed -ie "s,PATH_TO_WEB_ROOT,$web_root,g" /etc/nginx/sites-available/web-ui-http.conf.example
+        sudo sed -ie "s,PATH_TO_WEB_ROOT,$web_root,g" /etc/nginx/sites-available/web-ui-http.conf.example
 
-        service nginx reload
+        sudo service nginx reload
     fi
 }
 
