@@ -266,16 +266,18 @@ mk_folder_mine(){
     sudo chown -R $USER $pwd
 }
 
+init(){
+    mk_folder_mine
+    update_self
+}
+
 # ============
 # = Commands =
 # ============
 case "$1" in
     install)
-        # make folder mine
-        mk_folder_mine
-
-        # = Update myself =
-        update_self
+        # init
+        init
 
         # = Setup Folder Structures =
         setup_folder_structure
@@ -302,11 +304,8 @@ case "$1" in
         install_nginx
         ;;
     update)
-        # make folder mine
-        mk_folder_mine
-
-        # = Update myself =
-        update_self
+        # init
+        init
 
         # = Clone BitShares repo and build =
         update_node
@@ -318,8 +317,8 @@ case "$1" in
         build_gui
         ;;
     update_gui)
-        # make folder mine
-        mk_folder_mine
+        # init
+        init
 
         # = Install nodejs, npm using nvm =
         use_nvm
