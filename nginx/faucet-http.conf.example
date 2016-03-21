@@ -61,6 +61,7 @@ server {
         passenger_min_instances 2;
         passenger_enabled on;
         rack_env production;
+		# change to path to ruby
         passenger_ruby  /home/runner/.rvm/gems/ruby-2.1.5@bts2faucet/wrappers/ruby;
     }
 
