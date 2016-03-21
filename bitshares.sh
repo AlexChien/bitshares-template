@@ -250,11 +250,14 @@ install_nginx(){
         # prepare conf files
         sudo cp $pwd/nginx/ssl_params /etc/nginx/
         for conf in $pwd/nginx/*.example; do sudo cp $conf /etc/nginx/sites-available/; done
-        sudo rm /etc/nginx/sites-enabled/default
+        if [[ -f /etc/nginx/sites-enabled/default ]]; then
+            sudo rm /etc/nginx/sites-enabled/default
+        fi
         sudo ln -s /etc/nginx/sites-available/web-ui-http.conf.example /etc/nginx/sites-enabled/web-ui-http.conf
 
         # update root directory
         sudo sed -ie "s,PATH_TO_WEB_ROOT,$web_root,g" /etc/nginx/sites-available/web-ui-http.conf.example
+        sudo sed -ie "s,PATH_TO_WEB_ROOT,$web_root,g" /etc/nginx/sites-available/web-ui-https.conf.example
 
         sudo service nginx reload
     fi
