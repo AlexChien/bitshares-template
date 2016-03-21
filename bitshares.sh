@@ -258,11 +258,18 @@ command_exists(){
     command -v foo >/dev/null 2>&1 ;
 }
 
+update_self(){
+    git pull
+}
+
 # ============
 # = Commands =
 # ============
 case "$1" in
     install)
+        # = Update myself =
+        update_self
+
         # = Setup Folder Structures =
         setup_folder_structure
 
@@ -288,6 +295,9 @@ case "$1" in
         install_nginx
         ;;
     update)
+        # = Update myself =
+        update_self
+
         # = Clone BitShares repo and build =
         update_node
 
