@@ -46,6 +46,7 @@ src_dir="$pwd/src"
 build_dir="$pwd/build"
 opt_dir="$pwd/opt"
 boost_root="$opt_dir/boost_1_57_0"
+web_root=$build_dir/web_root
 
 # =============
 # = Functions =
@@ -55,6 +56,9 @@ setup_folder_structure(){
     for dir in $src_dir $build_dir $opt_dir; do
       mkdir -p $dir
     done
+
+    # setup wallet website
+    mkdir -p $build_dir/web_root
 }
 
 install_bitshares_requirements(){
@@ -196,9 +200,6 @@ replace_default_connection(){
 }
 
 build_gui(){
-    # setup wallet website
-    mkdir -p $build_dir/web_root
-    web_root=$build_dir/web_root
 
     cd $src_dir/bitshares-2-ui/web
     # if [[ ! -f build.sh ]]; then
@@ -206,7 +207,7 @@ build_gui(){
         printf '%s\n%s\n' '#!/bin/sh' \
           '# use this script to build web ui code and deploy to web root' \
           'npm run build' \
-          "cp -r $src_dir/bitshares-2-ui/web/dist/* $web_root" \
+          "sudo cp -r $src_dir/bitshares-2-ui/web/dist/* $web_root" \
           "sudo chown -R www-data:www-data $web_root" \
           "sudo chmod -R 775 $web_root"  > ./build.sh
         chmod +x ./build.sh
@@ -269,6 +270,7 @@ update_self(){
 
 mk_folder_mine(){
     sudo chown -R $USER $pwd
+    sudo chown -R www-data:www-data $web_root
 }
 
 init(){
