@@ -106,6 +106,11 @@ update_node(){
     mkdir -p $build_dir/bitshares-2
     cd $build_dir/bitshares-2
 
+    # delete CMakeCache
+    if [[ -f $build_dir/bitshares-2/CMakeCache.txt ]]; then
+        rm $build_dir/bitshares-2/CMakeCache.txt
+    fi
+
     # create build.sh for future use
     if [[ ! -f $build_dir/bitshares-2/build.sh ]]; then
         printf '%s\n%s\n' '#!/bin/sh' "cmake -DBOOST_ROOT=$boost_root -DCMAKE_BUILD_TYPE=Release $src_dir/bitshares-2" "make -j$(nproc)" > build.sh
