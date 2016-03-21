@@ -5,6 +5,7 @@
 # usage: ./bitshares [install|update]
 #   install: install: install bitshares on a brand new environment
 #   update: update: update bitshares(witness_node, cli_wallet, delayed_node) and web-gui
+#   update_gui: only update guid
 #
 # Author:  Alex Chien <alexchien97@gmail.com>.
 #
