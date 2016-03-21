@@ -112,8 +112,10 @@ update_node(){
     fi
 
     # create build.sh for future use
-    printf '%s\n%s\n' '#!/bin/sh' "cmake -DBOOST_ROOT=$boost_root -DCMAKE_BUILD_TYPE=Release $src_dir/bitshares-2" "make -j$(nproc)" > build.sh
-    chmod +x build.sh
+    # if [[ ! -f $build_dir/bitshares-2/build.sh ]]; then
+        printf '%s\n%s\n' '#!/bin/sh' "cmake -DBOOST_ROOT=$boost_root -DCMAKE_BUILD_TYPE=Release $src_dir/bitshares-2" "make -j$(nproc)" > build.sh
+        chmod +x build.sh
+    # fi
 
     source $build_dir/bitshares-2/build.sh
 
@@ -199,14 +201,16 @@ build_gui(){
     web_root=$build_dir/web_root
 
     cd $src_dir/bitshares-2-ui/web
-    # generate build.sh for future use
-    printf '%s\n%s\n' '#!/bin/sh' \
-      '# use this script to build web ui code and deploy to web root' \
-      'npm run build' \
-      "cp -r $src_dir/bitshares-2-ui/web/dist/* $web_root" \
-      "chown -R www-data:www-data $web_root" \
-      "chmod -R 775 $web_root"  > ./build.sh
-    chmod +x ./build.sh
+    # if [[ ! -f build.sh ]]; then
+        # generate build.sh for future use
+        printf '%s\n%s\n' '#!/bin/sh' \
+          '# use this script to build web ui code and deploy to web root' \
+          'npm run build' \
+          "cp -r $src_dir/bitshares-2-ui/web/dist/* $web_root" \
+          "chown -R www-data:www-data $web_root" \
+          "chmod -R 775 $web_root"  > ./build.sh
+        chmod +x ./build.sh
+    # fi
 
     source $src_dir/bitshares-2-ui/web/build.sh
 }
