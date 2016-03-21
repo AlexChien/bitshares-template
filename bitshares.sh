@@ -207,8 +207,8 @@ build_gui(){
           '# use this script to build web ui code and deploy to web root' \
           'npm run build' \
           "cp -r $src_dir/bitshares-2-ui/web/dist/* $web_root" \
-          "chown -R www-data:www-data $web_root" \
-          "chmod -R 775 $web_root"  > ./build.sh
+          "sudo chown -R www-data:www-data $web_root" \
+          "sudo chmod -R 775 $web_root"  > ./build.sh
         chmod +x ./build.sh
     # fi
 
