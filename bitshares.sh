@@ -105,7 +105,7 @@ update_node(){
     # missing Doxyfile error
     # https://github.com/cryptonomex/graphene/issues/633
     # reason is we don't make within the source folder, waiting for a official fix
-    patch -p1 < $pwd/misc/634.patch
+    # patch -p1 < $pwd/misc/634.patch
 
     # make build directory ready
     mkdir -p $build_dir/rex-ledger
@@ -269,7 +269,7 @@ command_exists(){
 }
 
 update_self(){
-    git pull
+    git pull origin rex
 }
 
 mk_folder_mine(){
@@ -306,7 +306,7 @@ case "$1" in
         update_gui
 
         # = Replace default ws connection with our witness_node =
-        replace_default_connection
+        # replace_default_connection
 
         # = Build GUI code and deploy it to web_root =
         build_gui
