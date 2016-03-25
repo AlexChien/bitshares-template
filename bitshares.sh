@@ -278,6 +278,9 @@ mk_folder_mine(){
 }
 
 init(){
+    # = Setup Folder Structures =
+    setup_folder_structure
+
     mk_folder_mine
     update_self
 }
@@ -289,9 +292,6 @@ case "$1" in
     install)
         # init
         init
-
-        # = Setup Folder Structures =
-        setup_folder_structure
 
         # Update Ubuntu and install prerequisites for running BitShares #
         install_bitshares_requirements
