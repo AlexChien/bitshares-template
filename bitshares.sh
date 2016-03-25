@@ -47,7 +47,7 @@ src_dir="$pwd/src"
 build_dir="$pwd/build"
 opt_dir="$pwd/opt"
 boost_root="$opt_dir/boost_1_57_0"
-web_root=$build_dir/web_root
+web_root="$build_dir/web_root"
 
 # =============
 # = Functions =
@@ -90,15 +90,15 @@ update_node(){
     git_args="--init --recursive"
 
     # check if it's cloned already
-    if [[ -d "$src_dir/bitshares-2" ]]; then
-        cd $src_dir/bitshares-2
+    if [[ -d "$src_dir/rex-ledger" ]]; then
+        cd $src_dir/rex-ledger
         git pull
         git_args="--recursive"
     else
-        git clone https://github.com/bitshares/bitshares-2.git
+        git clone -b rex https://github.com/AlexChien/graphene.git
     fi
 
-    cd $src_dir/bitshares-2
+    cd $src_dir/rex-ledger
     git submodule update $git_args
 
     # TODO: find a proper solution
@@ -108,21 +108,21 @@ update_node(){
     patch -p1 < $pwd/misc/634.patch
 
     # make build directory ready
-    mkdir -p $build_dir/bitshares-2
-    cd $build_dir/bitshares-2
+    mkdir -p $build_dir/rex-ledger
+    cd $build_dir/rex-ledger
 
     # delete CMakeCache
-    if [[ -f $build_dir/bitshares-2/CMakeCache.txt ]]; then
-        rm $build_dir/bitshares-2/CMakeCache.txt
+    if [[ -f $build_dir/rex-ledger/CMakeCache.txt ]]; then
+        rm $build_dir/rex-ledger/CMakeCache.txt
     fi
 
     # create build.sh for future use
-    # if [[ ! -f $build_dir/bitshares-2/build.sh ]]; then
-        printf '%s\n%s\n' '#!/bin/sh' "cmake -DBOOST_ROOT=$boost_root -DCMAKE_BUILD_TYPE=Release $src_dir/bitshares-2" "make -j$(nproc)" > build.sh
+    # if [[ ! -f $build_dir/rex-ledger/build.sh ]]; then
+        printf '%s\n%s\n' '#!/bin/sh' "cmake -DBOOST_ROOT=$boost_root -DCMAKE_BUILD_TYPE=Release $src_dir/rex-ledger" "make -j$(nproc)" > build.sh
         chmod +x build.sh
     # fi
 
-    source $build_dir/bitshares-2/build.sh
+    source $build_dir/rex-ledger/build.sh
 
     # create blockchain data directory
     mkdir -p $build_dir/blockchain_data/logs/witness_node
@@ -140,7 +140,7 @@ update_node(){
 
     # cp compiled binary to /usr/bin
     for binname in witness_node cli_wallet delayed_node; do
-      sudo cp $build_dir/bitshares-2/programs/$binname/$binname /usr/bin/
+      sudo cp $build_dir/rex-ledger/programs/$binname/$binname /usr/bin/
     done
 
     sudo cp $pwd/misc/witness_node.ini /etc/init.d/witness_node
@@ -157,15 +157,15 @@ update_gui(){
     git_args="--init --recursive"
 
     # check if it's cloned already
-    if [[ -d "$src_dir/bitshares-2-ui" ]]; then
-        cd $src_dir/bitshares-2-ui
+    if [[ -d "$src_dir/client-ui" ]]; then
+        cd $src_dir/client-ui
         git pull
         git_args="--recursive"
     else
-        git clone https://github.com/bitshares/bitshares-2-ui.git
+        git clone -b rex https://github.com/AlexChien/graphene-ui.git
     fi
 
-    cd $src_dir/bitshares-2-ui
+    cd $src_dir/client-ui
     git submodule update $git_args
 
     # get latest node-sass
@@ -173,7 +173,7 @@ update_gui(){
 
     # install dependencies for each fold
     for dir in dl web; do
-      cd "$src_dir/bitshares-2-ui/$dir" && npm install
+      cd "$src_dir/client-ui/$dir" && npm install
     done
 }
 
@@ -191,9 +191,9 @@ replace_default_connection(){
     sed -i -e "s|connection: \"wss://bitshares.openledger.info/ws\"|connection: \"$my_ws\"|g" \
         -e "s|\"wss://bitshares.openledger.info/ws\"|\"$my_ws\",\"wss://bitshares.openledger.info/ws\"|g" \
         -e "s|faucet_address: \"https://bitshares.openledger.info\"|faucet_address: \"https://bts2faucet.dacplay.org\"|g" \
-        $src_dir/bitshares-2-ui/dl/src/stores/SettingsStore.js
+        $src_dir/client-ui/dl/src/stores/SettingsStore.js
 
-    cd $src_dir/bitshares-2-ui
+    cd $src_dir/client-ui
     git config user.name `hostname`
     git config user.email "root@`hostname`"
     git add dl/src/stores/SettingsStore.js
@@ -202,19 +202,19 @@ replace_default_connection(){
 
 build_gui(){
 
-    cd $src_dir/bitshares-2-ui/web
+    cd $src_dir/client-ui/web
     # if [[ ! -f build.sh ]]; then
         # generate build.sh for future use
         printf '%s\n%s\n' '#!/bin/sh' \
           '# use this script to build web ui code and deploy to web root' \
           'npm run build' \
-          "sudo cp -r $src_dir/bitshares-2-ui/web/dist/* $web_root" \
+          "sudo cp -r $src_dir/client-ui/web/dist/* $web_root" \
           "sudo chown -R www-data:www-data $web_root" \
           "sudo chmod -R 775 $web_root"  > ./build.sh
         chmod +x ./build.sh
     # fi
 
-    source $src_dir/bitshares-2-ui/web/build.sh
+    source $src_dir/client-ui/web/build.sh
 }
 
 use_nvm(){
