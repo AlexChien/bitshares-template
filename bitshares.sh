@@ -92,10 +92,10 @@ update_node(){
     # check if it's cloned already
     if [[ -d "$src_dir/rex-ledger" ]]; then
         cd $src_dir/rex-ledger
-        git pull
+        git pull origin rex
         git_args="--recursive"
     else
-        git clone -b rex https://github.com/AlexChien/graphene.git
+        git clone -b rex https://github.com/AlexChien/graphene.git rex-ledger
     fi
 
     cd $src_dir/rex-ledger
@@ -159,10 +159,10 @@ update_gui(){
     # check if it's cloned already
     if [[ -d "$src_dir/client-ui" ]]; then
         cd $src_dir/client-ui
-        git pull
+        git pull origin rex
         git_args="--recursive"
     else
-        git clone -b rex https://github.com/AlexChien/graphene-ui.git
+        git clone -b rex https://github.com/AlexChien/graphene-ui.git client-ui
     fi
 
     cd $src_dir/client-ui
