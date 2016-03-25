@@ -47,7 +47,7 @@ src_dir="$pwd/src"
 build_dir="$pwd/build"
 opt_dir="$pwd/opt"
 boost_root="$opt_dir/boost_1_57_0"
-web_root=$build_dir/web_root
+web_root="$build_dir/web_root"
 
 # =============
 # = Functions =
