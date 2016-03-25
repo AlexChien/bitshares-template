@@ -225,6 +225,7 @@ use_nvm(){
     fi
     . "$HOME/.nvm/nvm.sh"
     nvm use v5
+    nvm alias default v5
 
     # to fix issue
     # sh: 1: node: Permission denied
