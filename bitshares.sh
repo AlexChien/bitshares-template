@@ -73,7 +73,7 @@ install_bitshares_requirements(){
     sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.9 60 --slave /usr/bin/g++ g++ /usr/bin/g++-4.9
 
     sudo apt-get install -y curl git ntp cmake build-essential libbz2-dev libdb++-dev libdb-dev libssl-dev openssl libreadline-dev autoconf libtool libboost-all-dev
-    sudo apt-get install -y autotools-dev  libicu-dev python-dev screen
+    sudo apt-get install -y autotools-dev  libicu-dev python-dev screen nodejs-legacy
     sudo apt-get install -y doxygen libncurses5-dev
 
     # boost
