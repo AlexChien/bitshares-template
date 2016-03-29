@@ -112,9 +112,9 @@ update_node(){
     cd $build_dir/rex-ledger
 
     # delete CMakeCache
-    if [[ -f $build_dir/rex-ledger/CMakeCache.txt ]]; then
-        rm $build_dir/rex-ledger/CMakeCache.txt
-    fi
+    # if [[ -f $build_dir/rex-ledger/CMakeCache.txt ]]; then
+    #     rm $build_dir/rex-ledger/CMakeCache.txt
+    # fi
 
     # create build.sh for future use
     # if [[ ! -f $build_dir/rex-ledger/build.sh ]]; then
