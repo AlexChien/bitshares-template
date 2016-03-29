@@ -215,8 +215,8 @@ build_gui(){
           '# use this script to build web ui code and deploy to web root' \
           'npm run build' \
           "sudo cp -r $src_dir/client-ui/web/dist/* $web_root" \
-          "sudo chown -R www-data:www-data $web_root" \
           "sudo chmod -R 775 $web_root"  > ./build.sh
+          # "sudo chown -R www-data:www-data $web_root" \
         chmod +x ./build.sh
     # fi
 
@@ -281,7 +281,7 @@ update_self(){
 
 mk_folder_mine(){
     sudo chown -R $USER $pwd
-    sudo chown -R www-data:www-data $web_root
+    # sudo chown -R www-data:www-data $web_root
 }
 
 init(){
