@@ -143,10 +143,13 @@ update_node(){
       sudo cp $build_dir/rex-ledger/programs/$binname/$binname /usr/bin/
     done
 
-    sudo cp $pwd/misc/witness_node.ini /etc/init.d/witness_node
-    sudo sed -i -e "s|PATH_TO_DATA_DIR|$build_dir/blockchain_data|g" /etc/init.d/witness_node
-    sudo chmod +x /etc/init.d/witness_node
-    sudo update-rc.d witness_node defaults 99 01
+    # only generate the file if it's not there yet
+    if [[ ! -f /etc/init.d/witness_node ]]; then
+      sudo cp $pwd/misc/witness_node.ini /etc/init.d/witness_node
+      sudo sed -i -e "s|PATH_TO_DATA_DIR|$build_dir/blockchain_data|g" /etc/init.d/witness_node
+      sudo chmod +x /etc/init.d/witness_node
+      sudo update-rc.d witness_node defaults 99 01
+    fi
 
     # start witness node
     sudo /etc/init.d/witness_node start
@@ -315,7 +318,7 @@ case "$1" in
         # = Install nginx + passenger =
         install_nginx
         ;;
-    update)
+    update_all)
         # init
         init
 
@@ -327,6 +330,13 @@ case "$1" in
 
         # = Build GUI code and deploy it to web_root =
         build_gui
+        ;;
+    update_node)
+        # init
+        init
+
+        # = Clone BitShares repo and build =
+        update_node
         ;;
     update_gui)
         # init
@@ -344,7 +354,8 @@ case "$1" in
     *)
         echo "Usage: ./bitshares.sh {install|update}"
         echo "install: install bitshares on a brand new environment"
-        echo "update: update bitshares(witness_node, cli_wallet, delayed_node) and web-gui"
+        echo "update_all: update bitshares(witness_node, cli_wallet, delayed_node) and web-gui"
+        echo "update_node: update bitshares(witness_node, cli_wallet, delayed_node) "
         echo "update_gui: only update and build web-gui"
         exit 1
         ;;
