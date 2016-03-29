@@ -124,6 +124,9 @@ update_node(){
 
     source $build_dir/rex-ledger/build.sh
 
+    # copy genesis.json
+    cp $src_dir/rex-ledger/programs/witness_node/genesis.json $build_dir/blockchain_data/
+
     # create blockchain data directory
     mkdir -p $build_dir/blockchain_data/logs/witness_node
 
